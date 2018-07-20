@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Dimensions, Image, KeyboardAvoidingView } from 'react-native';
+import PropTypes from 'prop-types';
 import { Badge, Text, SearchBar } from 'react-native-elements';
 import {
   Container,
@@ -11,31 +12,36 @@ import {
   Icon, Item, Input, View, DeckSwiper, Card, CardItem, Body
 } from 'native-base';
 
-import SideSwiper from './components/SideSwiper';
+import SideSwiper from '../components/SideSwiper';
+import { Actions } from 'react-native-router-flux';
 
 const cards = [
   {
     text: 'Comida Japonesa',
-    image: require('./static/img/japanese-food.jpg'),
+    image: require('../static/img/japanese-food.jpg'),
     sub: 'O melhor do oriente!'
   },
   {
     text: 'Comida italiana',
-    image: require('./static/img/italian-food.jpg'),
+    image: require('../static/img/italian-food.jpg'),
     sub: 'Alguém tocou no meu espaguete?!'
   }
 ]
 
 export default class Main extends React.Component {
-    static navigationOptions = {
-        title: 'Bem vindo!'
-    }
+
+  static contextTypes = {
+    openDrawer: PropTypes.func.isRequired
+  }
+
   render() {
     return (
       <Container style={styles.container}>
         <Header searchBar rounded style={styles.header}>
           <Left>
-            <Button transparent> <Icon name='menu' style={{ color: '#ffc102' }} /> </Button>
+            <Button 
+              onPress={this.context.openDrawer}
+            transparent> <Icon name='menu' style={{ color: '#ffc102' }} /> </Button>
           </Left>
         </Header>
         <Content style={styles.content}>

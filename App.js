@@ -1,82 +1,66 @@
-import React from 'react';
-import { StyleSheet, Dimensions, Image, KeyboardAvoidingView } from 'react-native';
-import { Badge, Text, SearchBar } from 'react-native-elements';
-import {
-  Container,
-  Content,
-  Header,
-  Footer,
-  Left,
-  Button,
-  Icon, Item, Input, View, DeckSwiper, Card, CardItem, Body
-} from 'native-base';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Text, Dimensions, Image, KeyboardAvoidingView } from 'react-native';
+import { Router, Stack, Scene, ActionConst } from 'react-native-router-flux';
+import Drawer from 'react-native-drawer';
 
-import SideSwiper from './components/SideSwiper';
+import Main from './screens/Main';
+import Login from './screens/Login';
+import Sidebar from './screens/Sidebar';
 
-const cards = [
-  {
-    text: 'Comida Japonesa',
-    image: require('./static/img/japanese-food.jpg'),
-    sub: 'O melhor do oriente!'
-  },
-  {
-    text: 'Comida italiana',
-    image: require('./static/img/italian-food.jpg'),
-    sub: 'Alguém tocou no meu espaguete?!'
+export default class App extends Component {
+
+  closeDrawer = () => {
+    this.drawer.close();
+  };
+
+  openDrawer = () => {
+    this.drawer.open();
+  };
+
+  static childContextTypes = {
+    openDrawer: PropTypes.func,
+    closeDrawer: PropTypes.func
+  };
+
+  getChildContext() {
+    return {
+      openDrawer: this.openDrawer,
+      closeDrawer: this.closeDrawer
+    };
   }
-]
 
-export default class App extends React.Component {
   render() {
-    return (
-      <Container style={styles.container}>
-        <Header searchBar rounded style={styles.header}>
-          <Left>
-            <Button transparent> <Icon name='menu' style={{ color: '#ffc102' }} /> </Button>
-          </Left>
-        </Header>
-        <Content style={styles.content}>
-          <View>
-            <Text h2 style={{ color: 'white' }} >Olá, visitante!</Text>
-            <Text h5 style={{ color: 'white' }} >O que teremos para hoje?</Text>
 
-            <View searchBar rounded>
-              <Item>
-                <Icon name="ios-search" />
-                <Input
-                  style={styles.input}
-                  placeholderTextColor='white'
-                  placeholder="Refeição ou restaurante..."
-                />
-              </Item>
-            </View>
-            <SideSwiper cards={cards} />
-          </View>
-        </Content>
-      </Container>
-    );
+    return (
+      <Drawer
+        ref={(ref) => { this.drawer = ref }}
+        content={<Sidebar />}
+        onClose={() => this.closeDrawer()}
+
+        side="left"
+        type='overlay'
+        tapToClose={true}
+        openDrawerOffset={0.2}
+        panCloseMask={0.2}
+        closedDrawerOffset={-3}
+        styles={drawerStyles}
+        tweenHandler={(ratio) => ({
+          main: { opacity: (2 - ratio) / 2 }
+        })}
+      >
+        <Router>
+          <Stack key='root' hideNavBar>
+            <Scene key='main' component={Main} title='Main' />
+            <Scene key='login' component={Login} title='Login' />
+          </Stack>
+        </Router>
+      </Drawer>
+    )
   }
 }
 
-let windowWidth = Dimensions.get('window').width;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  header: {
-    backgroundColor: '#eb2023',
-    width: windowWidth
-  },
-  content: {
-    backgroundColor: '#eb2023',
-    width: windowWidth,
-    padding: windowWidth / 20
-  },
-  input: {
-    color: 'white'
-  }
-});
+const drawerStyles = {
+  drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3 },
+  main: { paddingLeft: 3 }
+}
