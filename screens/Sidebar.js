@@ -55,9 +55,10 @@ let windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#eb2023',
+        backgroundColor: '#c0392b',
         alignItems: 'center',
         justifyContent: 'center',
+        width: '100%'
     },
     header: {
         flex: 1,
@@ -65,6 +66,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         marginTop: 25,
+        borderBottomColor: 'white',
+        borderBottomWidth: 1,
     },
     list: {
         marginTop: 25

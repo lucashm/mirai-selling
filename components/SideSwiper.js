@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, Image, ScrollView } from 'react-native';
+import { StyleSheet, Dimensions, Image, ScrollView, TouchableHighlight, ActivityIndicator } from 'react-native';
 import { Badge, Text, SearchBar } from 'react-native-elements';
 import {
   Container,
@@ -10,17 +10,51 @@ import {
   Button,
   Icon, Item, Input, View, DeckSwiper, Card, CardItem, Body
 } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 
 export default class SideSwiper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cards: []
+      cards: [],
+      loaded: []
     }
   }
 
   componentDidMount() {
     this.setState({ cards: this.props.cards })
+    let aux = [];
+    for (let i = 0; i < this.props.cards.length; i++) {
+      aux.push({
+        id: this.props.cards[i].id,
+        status: false
+      })
+    }
+    this.setState({ loaded: aux });
+  }
+
+
+  changeloadedStatus(id) {
+    let aux = this.state.loaded;
+    for (let i = 0; i < aux.length; i++) {
+      if (aux[i]['id'] == id) {
+        aux[i]['status'] = true;
+      }
+    }
+    this.setState({ loaded: aux });
+  }
+
+  checkIfLoaded(id) {
+    let aux = this.state.loaded;
+    for (let i = 0; i < aux.length; i++) {
+      if (aux[i]['id'] == id) {
+        if (aux[i]['status'] == true) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
   }
 
   render() {
@@ -29,18 +63,33 @@ export default class SideSwiper extends React.Component {
         {
           this.state.cards.map(card => {
             return (
-              <View key={card.text}>
-                <View style={styles.title}>
-                  <Text>{card.text}</Text>
-                </View>
-                <Image style={{ width: windowWidth * 0.9, height: 250 }} source={card.image} />
-                <View style={styles.footer}>
-                  <Icon name="heart" style={{ color: '#ed4a6a', marginRight: 'auto' }} />
-                  <View style={{ marginRight: 'auto' }}>
-                    <Text>{card.sub}</Text>
+              <TouchableHighlight
+                key={card.text}
+                onPress={() => Actions.foodList({ items: card.list, title: card.text })}>
+                <View>
+                  <View style={styles.title}>
+                    <Text>{card.text}</Text>
+                  </View>
+                  <ActivityIndicator style={this.state.loaded ? { display: 'none' } : { display: 'flex' }} size="large" color="#fff" />
+                  <Image
+                    onLoad={() => this.changeloadedStatus(card.id)}
+                    style={{ width: windowWidth * 0.9, height: 250 }}
+                    source={card.image} />
+                  {
+                    this.checkIfLoaded(card.id) ?
+                      <ActivityIndicator style={{ display: 'none' }} size="large" color="#fff" />
+                      :
+                      <ActivityIndicator size="large" color="#fff" />
+
+                  }
+                  <View style={styles.footer}>
+                    <Icon name="heart" style={{ color: '#ed4a6a', marginRight: 'auto' }} />
+                    <View style={{ marginRight: 'auto' }}>
+                      <Text>{card.sub}</Text>
+                    </View>
                   </View>
                 </View>
-              </View>
+              </TouchableHighlight>
             )
           })
         }

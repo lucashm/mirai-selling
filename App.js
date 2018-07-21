@@ -7,6 +7,7 @@ import Drawer from 'react-native-drawer';
 import Main from './screens/Main';
 import Login from './screens/Login';
 import Sidebar from './screens/Sidebar';
+import FoodList from './screens/FoodList';
 
 export default class App extends Component {
 
@@ -39,7 +40,7 @@ export default class App extends Component {
         onClose={() => this.closeDrawer()}
 
         side="left"
-        type='overlay'
+        type='static'
         tapToClose={true}
         openDrawerOffset={0.2}
         panCloseMask={0.2}
@@ -53,6 +54,7 @@ export default class App extends Component {
           <Stack key='root' hideNavBar>
             <Scene key='main' component={Main} title='Main' />
             <Scene key='login' component={Login} title='Login' />
+            <Scene key='foodList' component={FoodList} />
           </Stack>
         </Router>
       </Drawer>

@@ -15,16 +15,29 @@ import {
 import SideSwiper from '../components/SideSwiper';
 import { Actions } from 'react-native-router-flux';
 
+import { japaneseList, italianList, lunchList } from '../static/foodList';
+
 const cards = [
   {
+    id: 1,
     text: 'Comida Japonesa',
     image: require('../static/img/japanese-food.jpg'),
-    sub: 'O melhor do oriente!'
+    sub: 'O melhor do oriente!',
+    list: japaneseList
   },
   {
+    id: 2,
     text: 'Comida italiana',
     image: require('../static/img/italian-food.jpg'),
-    sub: 'Alguém tocou no meu espaguete?!'
+    sub: 'Alguém tocou no meu espaguete?!',
+    list: italianList
+  },
+  {
+    id: 3,
+    text: 'Lanches',
+    image: require('../static/img/lunch-food.jpg'),
+    sub: 'Pra quem tem pressa... ou não',
+    list: lunchList
   }
 ]
 
@@ -37,11 +50,11 @@ export default class Main extends React.Component {
   render() {
     return (
       <Container style={styles.container}>
-        <Header searchBar rounded style={styles.header}>
+        <Header iosBarStyle='light-content' androidStatusBarColor='#c0392b' searchBar rounded style={styles.header}>
           <Left>
-            <Button 
+            <Button
               onPress={this.context.openDrawer}
-            transparent> <Icon name='menu' style={{ color: '#ffc102' }} /> </Button>
+              transparent> <Icon name='menu' style={{ color: '#ffc102' }} /> </Button>
           </Left>
         </Header>
         <Content style={styles.content}>
@@ -77,11 +90,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    backgroundColor: '#eb2023',
+    backgroundColor: '#c0392b',
     width: windowWidth
   },
   content: {
-    backgroundColor: '#eb2023',
+    backgroundColor: '#c0392b',
     width: windowWidth,
     padding: windowWidth / 20
   },
